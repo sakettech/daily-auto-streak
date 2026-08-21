@@ -1,0 +1,25 @@
+name: Daily Auto Commit
+
+on:
+  schedule:
+    # Har din automatic chalega
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Update timestamp file
+        run: |
+          echo "Last sync: $(date)" > streak.txt
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "Saket Janghel"
+          git config --global user.email "broadgaugeproduct@gmail.com"
+          git add streak.txt
+          git commit -m "chore: automated daily update" || exit 0
+          git push
